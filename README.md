@@ -1,8 +1,9 @@
 GPduino-T
 =========
-
 ## 概要
 GPduino-Tは、ESP32搭載のWiFiラジコン戦車制御ボードです。
+
+![写真](photo.jpg)
 
 以下のことができます。
 
@@ -34,13 +35,15 @@ GPduino-Tは、ESP32搭載のWiFiラジコン戦車制御ボードです。
 ## Arduino開発環境のセットアップ
 GPduino-T はESP32を搭載しており、Arduino IDEでファームウェアを開発できます。
 
+ここでは、Windows10での開発環境のセットアップについて説明します。他のプラットフォームでも同様です。適宜読み替えてください。
+
 * まず、ArduinoIDE をインストールしておきます。 (ここでは 1.8.2 を使用)
 * 残念ながら、Arduino Core for the ESP32はArduino IDEのボードマネージャには対応しておらず、以下のように手作業でインストールする必要があります。
 * まず、以下のリポジトリからクローンします。もしもGitが使えない場合、こちらからDownload ZIPして解凍してもかまいません。アップデートの時の手間だけの問題かと思います。
 	* ソース: https://github.com/espressif/arduino-esp32.git
     * 保存先: C:/Users/[YOUR_USER_NAME]/Documents/Arduino/hardware/espressif/esp32
 * 次に、下記のバイナリを実行します。
-	* C:/Users/[YOUR_USER_NAME]/Documents/Arduino/hardware/espressif/esp32/tools/get.exe
+	* C:/Users/ユーザ名/Documents/Arduino/hardware/espressif/esp32/tools/get.exe
 * DOS窓が開いてインストールが実行されます。あとはDOS窓が閉じるまで待ちます。
 * ノートン先生をはじめ一部のセキュリティソフトは、いくつかのバイナリをウィルスとして検出してしまうようです。(ノートン先生ではTrojan.Gen.8!cloudとして検出されます。)
 * Arduino IDEの[ツール] > [マイコンボード]で[ESP32 Dev Module]を選択します。
@@ -76,8 +79,28 @@ Waltersons製 1/24 バトルタンクシリーズ互換のIRバトルが可能�
 * Windows 7以降であればドライバが自動でインストールされ、COMポートとして認識されます。
 	* 自動でデバイスが認識されない環境ではFTDIのデバイスドライバをインストールしてください。
 * [ツール] > [シリアルポート]でESP32のポートを選択する。
-* BOOTボタン(SW2)を押し下げた状態で、RESETボタン(SW1)を押して離します。
+* BOOTボタン(SW2)を押し下げた状態で、RESETボタン(SW1)を押して離します。これで書き込みモードになります。
 * Uploadボタンで、ファームウェアを書き込みます。
+
+## サウンドデータの書き込み
+Arduinoスケッチとは別にサウンドデータもESP32のフラッシュメモリに書き込みます。
+
+GPduinoT.ino は、フラッシュメモリの0x100000番地から61440バイトの領域に砲撃音のサウンドデータ (data/cannon.bin) が格納されているものとしています。
+
+書き込みツール esptool.exe のあるディレクトリにパスを通しておきます。Windows10なら通常は下記ディレクトリになります。
+```
+C:\Users\ユーザ名\Documents\Arduino\hardware\espressif\esp32\tools
+```
+ESP32のBOOTボタン(SW2)を押し下げた状態で、RESETボタン(SW1)を押して離して書き込みモードにします。シリアルポートをPCに接続し、PCでCOMポート番号を確認します。ここではCOM3であったとします。そこで下記のコマンドを実行します。
+
+```
+esptool.exe -c esp32 -p COM3 -b 115200 write_flash 0x100000 data.bin
+```
+
+このサウンドデータは、下記のフォーマットのWAV形式ファイルから、先頭44バイトのヘッダを削除し、さらに符号なし16ビット値形式に変換するために各サンプル値に+0x8000したものです。
+* サンプリング周波数 11.025kHz
+* 符号つき16ビット量子化
+* モノラル
 
 ## 既知の問題点
 
