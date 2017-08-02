@@ -41,7 +41,7 @@ GPduino-T はESP32を搭載しており、Arduino IDEでファームウェアを
 * 残念ながら、Arduino Core for the ESP32はArduino IDEのボードマネージャには対応しておらず、以下のように手作業でインストールする必要があります。
 * まず、以下のリポジトリからクローンします。もしもGitが使えない場合、こちらからDownload ZIPして解凍してもかまいません。アップデートの時の手間だけの問題かと思います。
 	* ソース: https://github.com/espressif/arduino-esp32.git
-    * 保存先: C:/Users/[YOUR_USER_NAME]/Documents/Arduino/hardware/espressif/esp32
+    * 保存先: C:/Users/ユーザ名/Documents/Arduino/hardware/espressif/esp32
 * 次に、下記のバイナリを実行します。
 	* C:/Users/ユーザ名/Documents/Arduino/hardware/espressif/esp32/tools/get.exe
 * DOS窓が開いてインストールが実行されます。あとはDOS窓が閉じるまで待ちます。
